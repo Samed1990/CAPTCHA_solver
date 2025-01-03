@@ -13,14 +13,14 @@ st.write("Please solve the CAPTCHA displayed below and submit your answer.")
 # Filepath for the CAPTCHA image
 #captcha_image_path = "Screenshot EDBO.png"
 
-# OneDrive direct download link
-screenshot_url = "https://hkdirektoratet-my.sharepoint.com/:i:/g/personal/samad_ismayilov_hkdir_no/EZc76tfE0odNhZW8FMRU0WAB8THtdPx90vRnQlK2rTaUwg?download=1"
+# Update the variable to use the new OneDrive direct download link
+captcha_image_path = "https://hkdirektoratet-my.sharepoint.com/:i:/g/personal/samad_ismayilov_hkdir_no/EZc76tfE0odNhZW8FMRU0WAB8THtdPx90vRnQlK2rTaUwg?download=1"
 
 # Add cache-buster to always fetch the latest image
-screenshot_url_with_cache_buster = f"{screenshot_url}&cache_buster={int(time.time())}"
+captcha_image_path_with_cache_buster = f"{captcha_image_path}&cache_buster={int(time.time())}"
 
-# Display the image in the Streamlit app
-st.image(screenshot_url_with_cache_buster, caption="Latest Screenshot", use_column_width=True)
+# Display the updated CAPTCHA image in the Streamlit app
+st.image(captcha_image_path_with_cache_buster, caption="Latest Screenshot", use_column_width=True)
 
 # Initialize or load the submitted answers DataFrame
 if "submitted_answers" not in st.session_state:
