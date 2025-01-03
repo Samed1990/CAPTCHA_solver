@@ -16,7 +16,7 @@ captcha_image_path = "https://hkdirektoratet-my.sharepoint.com/:i:/g/personal/sa
 captcha_image_path_with_cache_buster = f"{captcha_image_path}&cache_buster={int(time.time())}"
 
 # Display the CAPTCHA image in the Streamlit app
-st.image(captcha_image_path_with_cache_buster, caption="Latest Screenshot", use_container_width=True)
+#st.image(captcha_image_path_with_cache_buster, caption="Latest Screenshot", use_container_width=True)
 
 # Shared "Can Edit" file link for solutions
 solution_file_url = "https://hkdirektoratet-my.sharepoint.com/:t:/g/personal/samad_ismayilov_hkdir_no/EZIrJZViCExKmx-LsgGz9cMBhCNNsbYww9AC0D2BAs4Uiw?download=1"
@@ -90,8 +90,8 @@ def submit_solution():
 image_col, table_col, input_col = st.columns([1, 2, 1])
 
 # Left column: Display the CAPTCHA image
-#with image_col:
-   # st.image(captcha_image_path_with_cache_buster, caption="CAPTCHA Image", use_column_width=True)
+with image_col:
+   st.image(captcha_image_path_with_cache_buster, caption="CAPTCHA Image", use_container_width=True)
 
 # Middle column: Display the table of submitted solutions
 with table_col:
