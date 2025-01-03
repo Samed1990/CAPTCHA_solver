@@ -9,7 +9,7 @@ st.title("CAPTCHA Solver")
 st.write("Please solve the CAPTCHA displayed below and submit your answer.")
 
 # Filepath for the CAPTCHA image
-captcha_image_path = r"C:\Users\SamadIsmayilov\OneDrive - HKdirektoratet\Skrivebord\RPA prosjekt\test_img_folder\Screenshot EDBO.png"
+captcha_image_path = "Screenshot EDBO.png"
 
 # Initialize or load the submitted answers DataFrame
 if "submitted_answers" not in st.session_state:
