@@ -9,7 +9,7 @@ st.title("CAPTCHA Solver")
 st.write("Please solve the CAPTCHA displayed below and submit your answer.")
 
 # Filepath for the CAPTCHA image
-captcha_image_path = r"C:\Users\ismay\OneDrive\Desktop\Samad Utdanning IT\RPA_test\Screenshot EDBO.png"
+captcha_image_path = r"C:\Users\SamadIsmayilov\OneDrive - HKdirektoratet\Skrivebord\RPA prosjekt\test_img_folder\Screenshot EDBO.png"
 
 # Initialize or load the submitted answers DataFrame
 if "submitted_answers" not in st.session_state:
@@ -30,7 +30,7 @@ def submit_solution():
         st.session_state["submitted_answers"] = pd.concat([st.session_state["submitted_answers"], new_row], ignore_index=True)
         
         # Save the solution and timestamp to a file
-        solution_file_path = r"C:\Users\ismay\OneDrive\Desktop\Samad Utdanning IT\RPA_test\captcha_solution.txt"
+        solution_file_path = r"C:\Users\SamadIsmayilov\OneDrive - HKdirektoratet\Skrivebord\RPA prosjekt\test_img_folder\captcha_solution.txt"
         with open(solution_file_path, "a") as file:  # Append mode to keep all solutions
             file.write(f'{st.session_state["captcha_input"].strip()} - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n')
         
