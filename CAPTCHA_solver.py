@@ -20,7 +20,7 @@ captcha_image_path = "https://hkdirektoratet-my.sharepoint.com/:i:/g/personal/sa
 captcha_image_path_with_cache_buster = f"{captcha_image_path}&cache_buster={int(time.time())}"
 
 # Display the updated CAPTCHA image in the Streamlit app
-st.image(captcha_image_path_with_cache_buster, caption="Latest Screenshot", use_column_width=True)
+st.image(captcha_image_path_with_cache_buster, caption="Latest Screenshot", use_container_width=True)
 
 # Initialize or load the submitted answers DataFrame
 if "submitted_answers" not in st.session_state:
