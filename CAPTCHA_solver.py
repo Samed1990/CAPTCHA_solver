@@ -16,7 +16,7 @@ captcha_image_path = "https://hkdirektoratet-my.sharepoint.com/:i:/g/personal/sa
 captcha_image_path_with_cache_buster = f"{captcha_image_path}&cache_buster={int(time.time())}"
 
 # Display the CAPTCHA image in the Streamlit app
-#st.image(captcha_image_path_with_cache_buster, caption="Latest Screenshot", use_container_width=True)
+st.image(captcha_image_path_with_cache_buster, caption="Latest Screenshot", use_container_width=True)
 
 # Shared "Can Edit" file link for solutions
 solution_file_url = "https://hkdirektoratet-my.sharepoint.com/:t:/g/personal/samad_ismayilov_hkdir_no/EZIrJZViCExKmx-LsgGz9cMBhCNNsbYww9AC0D2BAs4Uiw?download=1"
@@ -60,13 +60,11 @@ def append_solution_to_onedrive(solution):
         # Prepare the new content
         new_content = existing_content + f"{solution} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
 
-        # Append the updated content back to the file (if edit permissions allow)
-        headers = {"Content-Type": "text/plain"}
-        response = requests.put(solution_file_url, data=new_content, headers=headers)
-        if response.status_code == 200:
-            st.success("Solution appended successfully.")
-        else:
-            st.error(f"Failed to append solution. Status code: {response.status_code}")
+        # Inform the user about limitations of appending to OneDrive directly
+        st.error(
+            "Currently, writing to OneDrive files directly is not supported via Streamlit. "
+            "Consider using an API or backend for secure file updates."
+        )
     except Exception as e:
         st.error(f"An error occurred while appending the solution: {e}")
 
@@ -91,7 +89,7 @@ image_col, table_col, input_col = st.columns([1, 2, 1])
 
 # Left column: Display the CAPTCHA image
 with image_col:
-   st.image(captcha_image_path_with_cache_buster, caption="CAPTCHA Image", use_container_width=True)
+    st.image(captcha_image_path_with_cache_buster, caption="CAPTCHA Image", use_container_width=True)
 
 # Middle column: Display the table of submitted solutions
 with table_col:
@@ -146,7 +144,7 @@ with table_col:
             unsafe_allow_html=True
         )
     else:
-        st.write("No solutions submitted yet.")
+        st.warning("No solutions submitted yet.")
 
 # Right column: Input field and submit button
 with input_col:
