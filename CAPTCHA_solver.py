@@ -90,8 +90,8 @@ def submit_solution():
 image_col, table_col, input_col = st.columns([1, 2, 1])
 
 # Left column: Display the CAPTCHA image
-with image_col:
-    st.image(captcha_image_path_with_cache_buster, caption="CAPTCHA Image", use_column_width=True)
+#with image_col:
+   # st.image(captcha_image_path_with_cache_buster, caption="CAPTCHA Image", use_column_width=True)
 
 # Middle column: Display the table of submitted solutions
 with table_col:
