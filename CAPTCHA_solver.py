@@ -7,7 +7,8 @@ from datetime import datetime
 TEXT_FILE_PATH = "solutions.txt"
 
 # CAPTCHA image path (provide your image URL here)
-captcha_image_path = "https://hkdirektoratet-my.sharepoint.com/:i:/g/personal/samad_ismayilov_hkdir_no/EZc76tfE0odNhZW8FMRU0WAB8THtdPx90vRnQlK2rTaUwg?download=1"
+captcha_image_path = "https://hkdirektoratet-my.sharepoint.com/personal/samad_ismayilov_hkdir_no/_layouts/15/download.aspx?share=EZc76tfE0odNhZW8FMRU0WAB8THtdPx90vRnQlK2rTaUwg&download=1"
+
 
 # Function to load solutions from the text file
 def load_solutions():
