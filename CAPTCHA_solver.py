@@ -13,7 +13,7 @@ captcha_image_path = "https://hkdirektoratet-my.sharepoint.com/:i:/g/personal/sa
 captcha_image_path_with_cache_buster = f"{captcha_image_path}&cache_buster={int(time.time())}"
 
 # Display the CAPTCHA image in the Streamlit app
-st.image(captcha_image_path_with_cache_buster, caption="CAPTCHA Image", use_container_width=True)
+#st.image(captcha_image_path_with_cache_buster, caption="CAPTCHA Image", use_container_width=True)
 
 # Function to initialize or update the solutions DataFrame in session state
 def initialize_solutions():
