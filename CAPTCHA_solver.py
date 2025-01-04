@@ -84,7 +84,14 @@ with image_col:
 # Middle column: Display the table of submitted solutions
 with table_col:
     if not solutions_df.empty:
-        st.write("###### Submitted Solutions")
+        st.markdown(
+            """
+            <div style="text-align: left; margin-left: 50px;">
+                <h3>Submitted Solutions</h3>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
         # Apply CSS styling for the table
         st.markdown(
             """
