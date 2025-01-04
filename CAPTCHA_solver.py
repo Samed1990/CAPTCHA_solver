@@ -48,23 +48,24 @@ def submit_solution():
         # Add the solution to the DataFrame with the current date and time
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         new_solution = {"Solution": st.session_state["captcha_input"].strip(), "Date & Time": timestamp}
-        global solutions_df
-
+        
         # Append the new solution to the DataFrame
+        global solutions_df
         solutions_df = pd.concat([pd.DataFrame([new_solution]), solutions_df], ignore_index=True)
-
-        # Ensure the "Date & Time" column is treated as a datetime object for proper sorting
+        
+        # Convert "Date & Time" column to datetime to ensure proper sorting
         solutions_df["Date & Time"] = pd.to_datetime(solutions_df["Date & Time"])
         
         # Sort the DataFrame by "Date & Time" in descending order
         solutions_df = solutions_df.sort_values(by="Date & Time", ascending=False, ignore_index=True)
-
+        
         # Save the solution to the text file
         save_solution_to_file(new_solution["Solution"], new_solution["Date & Time"])
         
         # Clear the input field
         st.session_state["captcha_input"] = ""
         st.success("Solution submitted successfully!")
+
 
 
 
