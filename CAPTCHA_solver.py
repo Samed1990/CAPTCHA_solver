@@ -86,7 +86,7 @@ with table_col:
     if not solutions_df.empty:
         st.markdown(
             """
-            <div style="text-align: left; margin-left: 60px;">
+            <div style="text-align: left; margin-left: 100px;">
                 <h3>Submitted Solutions</h3>
             </div>
             """,
