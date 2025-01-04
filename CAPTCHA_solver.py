@@ -156,29 +156,39 @@ with table_col:
         )
 
         # Pagination controls
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col1:
-            st.markdown(
-                """
-                <div style="margin-left: -100px;">
-                """, 
-                unsafe_allow_html=True
-            )
-            if st.session_state["current_page"] > 0:
-                if st.button("Previous"):
-                    st.session_state["current_page"] -= 1
-            st.markdown(
-                """
-                </div>
-                """, 
-                unsafe_allow_html=True
-            )
-        with col3:
-            if st.session_state["current_page"] < total_pages - 1:
-                if st.button("Next"):
-                    st.session_state["current_page"] += 1
+        st.markdown(
+            """
+            <style>
+            .pagination-buttons {
+                display: flex;
+                justify-content: center;
+                gap: 20px; /* Space between buttons */
+                margin-top: 20px;
+            }
+            </style>
+            """, unsafe_allow_html=True
+        )
+        st.markdown(
+            """
+            <div class="pagination-buttons">
+                <form method="post">
+                    <button type="submit" name="previous" class="btn" style="padding: 10px 20px;">Previous</button>
+                    <button type="submit" name="next" class="btn" style="padding: 10px 20px;">Next</button>
+                </form>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        # Handle button functionality
+        if st.session_state["current_page"] > 0 and st.button("Previous", key="prev_button"):
+            st.session_state["current_page"] -= 1
+
+        if st.session_state["current_page"] < total_pages - 1 and st.button("Next", key="next_button"):
+            st.session_state["current_page"] += 1
     else:
         st.write("No solutions submitted yet.")
+
 
 
 # Right column: Input field and submit button
