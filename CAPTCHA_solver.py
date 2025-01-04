@@ -51,15 +51,13 @@ def submit_solution():
         global solutions_df
         solutions_df = pd.concat([pd.DataFrame([new_solution]), solutions_df], ignore_index=True)
         
-        # Reorder the DataFrame to ensure the latest solution is on top
-        solutions_df = solutions_df.sort_values(by="Date & Time", ascending=False, ignore_index=True)
-        
         # Save the solution to the text file
         save_solution_to_file(new_solution["Solution"], new_solution["Date & Time"])
         
         # Clear the input field
         st.session_state["captcha_input"] = ""
         st.success("Solution submitted successfully!")
+
 
 # Layout: Split the page into three sections (image, table, input)
 image_col, table_col, input_col = st.columns([1, 2, 1])
