@@ -4,70 +4,100 @@ import time
 import requests
 from datetime import datetime
 
-
 # Set up the Streamlit app
 st.set_page_config(layout="wide")  # Use wide layout
 st.title("CAPTCHA Solver")
 st.write("Please solve the CAPTCHA displayed below and submit your answer.")
 
-# Filepath for the CAPTCHA image
-#captcha_image_path = "Screenshot EDBO.png"
-
-# Update the variable to use the new OneDrive direct download link
+# OneDrive CAPTCHA image link
 captcha_image_path = "https://hkdirektoratet-my.sharepoint.com/:i:/g/personal/samad_ismayilov_hkdir_no/EZc76tfE0odNhZW8FMRU0WAB8THtdPx90vRnQlK2rTaUwg?download=1"
 
-# Add cache-buster to always fetch the latest image
+# Add cache-buster to fetch the latest image
 captcha_image_path_with_cache_buster = f"{captcha_image_path}&cache_buster={int(time.time())}"
 
-# Display the updated CAPTCHA image in the Streamlit app
-st.image(captcha_image_path_with_cache_buster, caption="Latest Screenshot", use_container_width=True)
+# Display the CAPTCHA image in the Streamlit app
+#st.image(captcha_image_path_with_cache_buster, caption="Latest Screenshot", use_container_width=True)
+
+# Shared "Can Edit" file link for solutions
+solution_file_url = "https://hkdirektoratet-my.sharepoint.com/:t:/g/personal/samad_ismayilov_hkdir_no/EZIrJZViCExKmx-LsgGz9cMBhCNNsbYww9AC0D2BAs4Uiw?download=1"
+
+# Function to fetch existing solutions from OneDrive
+def fetch_existing_solutions():
+    try:
+        response = requests.get(solution_file_url)
+        if response.status_code == 200:
+            content = response.text
+            solutions = [
+                {"Solution": line.split(" - ")[0], "Date & Time": line.split(" - ")[1]}
+                for line in content.splitlines() if " - " in line
+            ]
+            return pd.DataFrame(solutions)
+        else:
+            st.error("Unable to fetch existing solutions. Please check the file permissions.")
+            return pd.DataFrame(columns=["Solution", "Date & Time"])
+    except Exception as e:
+        st.error(f"An error occurred while fetching solutions: {e}")
+        return pd.DataFrame(columns=["Solution", "Date & Time"])
 
 # Initialize or load the submitted answers DataFrame
 if "submitted_answers" not in st.session_state:
-    st.session_state["submitted_answers"] = pd.DataFrame(columns=["Solution"])
+    st.session_state["submitted_answers"] = fetch_existing_solutions()
 
 # Initialize the input field value in session state
 if "captcha_input" not in st.session_state:
     st.session_state["captcha_input"] = ""
 
+# Function to append a new solution to the OneDrive file
+def append_solution_to_onedrive(solution):
+    try:
+        # Fetch the existing content
+        response = requests.get(solution_file_url)
+        if response.status_code == 200:
+            existing_content = response.text
+        else:
+            existing_content = ""
+
+        # Prepare the new content
+        new_content = existing_content + f"{solution} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+
+        # Append the updated content back to the file (if edit permissions allow)
+        headers = {"Content-Type": "text/plain"}
+        response = requests.put(solution_file_url, data=new_content, headers=headers)
+        if response.status_code == 200:
+            st.success("Solution appended successfully.")
+        else:
+            st.error(f"Failed to append solution. Status code: {response.status_code}")
+    except Exception as e:
+        st.error(f"An error occurred while appending the solution: {e}")
+
 # Function to handle submission
 def submit_solution():
     if st.session_state["captcha_input"].strip():
-        # Add the solution to the DataFrame with the current date and time
+        # Append the solution to the OneDrive file
+        append_solution_to_onedrive(st.session_state["captcha_input"].strip())
+
+        # Update the session state DataFrame
         new_row = pd.DataFrame({
             "Solution": [st.session_state["captcha_input"].strip()],
             "Date & Time": [datetime.now().strftime("%Y-%m-%d %H:%M:%S")]
         })
         st.session_state["submitted_answers"] = pd.concat([st.session_state["submitted_answers"], new_row], ignore_index=True)
-        
-        # Save the solution and timestamp to a file
-        solution_file_path = r"C:\Users\SamadIsmayilov\OneDrive - HKdirektoratet\Skrivebord\RPA prosjekt\test_img_folder\captcha_solution.txt"
-        with open(solution_file_path, "a") as file:  # Append mode to keep all solutions
-            file.write(f'{st.session_state["captcha_input"].strip()} - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n')
-        
+
         # Clear the input field
         st.session_state["captcha_input"] = ""
-
 
 # Layout: Split the page into three sections (image, table, input)
 image_col, table_col, input_col = st.columns([1, 2, 1])
 
 # Left column: Display the CAPTCHA image
 with image_col:
-    if os.path.exists(captcha_image_path):
-        # Check if the table has any solutions
-        if not st.session_state["submitted_answers"].empty:
-            st.image(captcha_image_path, caption="CAPTCHA Image (small view)", width=250)  # Slightly larger minimized image
-        else:
-            st.image(captcha_image_path, caption="CAPTCHA Image (extra-large view)", width=800)  # Larger initial image
-    else:
-        st.write("No CAPTCHA image found. Please check back later.")
-
+   st.image(captcha_image_path_with_cache_buster, caption="CAPTCHA Image", use_container_width=True)
 
 # Middle column: Display the table of submitted solutions
 with table_col:
     if not st.session_state["submitted_answers"].empty:
         st.write("### Submitted Solutions")
+        
         # Apply CSS styling for the table
         st.markdown(
             """
@@ -75,7 +105,7 @@ with table_col:
             .styled-table {
                 border-collapse: collapse;
                 margin: auto; /* Center the table horizontally */
-                font-size: 22px; /* Larger font for solutions */
+                font-size: 18px; /* Adjusted font size */
                 font-family: Arial, sans-serif;
                 width: 100%; /* Full width of middle column */
                 max-width: 90%;
@@ -89,14 +119,14 @@ with table_col:
                 color: white; /* White text for header */
             }
             .styled-table th, .styled-table td {
-                padding: 15px 20px;
+                padding: 10px 15px; /* Adjusted padding */
                 border: 1px solid #dddddd;
             }
             .styled-table tbody tr {
                 border-bottom: 1px solid #dddddd;
             }
             .styled-table tbody tr:nth-of-type(even) {
-                background-color: #d3ecf8; /* Lighter blue for alternating rows */
+                background-color: #f3f3f3; /* Light gray for alternating rows */
             }
             .styled-table tbody tr:last-of-type {
                 border-bottom: 2px solid #add8e6; /* Light blue footer */
@@ -104,6 +134,7 @@ with table_col:
             </style>
             """, unsafe_allow_html=True
         )
+
         # Render the table using HTML for modern styling
         solutions_only = st.session_state["submitted_answers"]
         st.markdown(
@@ -114,17 +145,17 @@ with table_col:
             ),
             unsafe_allow_html=True
         )
+    else:
+        st.write("No solutions submitted yet.")
 
 # Right column: Input field and submit button
 with input_col:
     st.write("Enter the CAPTCHA solution below:")
-    # Input field for the CAPTCHA solution
     st.text_input(
         "Enter CAPTCHA solution",
         key="captcha_input",
         help="Type the solution and press Enter or click Submit.",
         on_change=submit_solution  # Trigger submission on Enter
     )
-    # Submit button
     if st.button("Submit"):
         submit_solution()
