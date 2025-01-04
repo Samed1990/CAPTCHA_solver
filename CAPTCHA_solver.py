@@ -78,7 +78,7 @@ image_col, table_col, input_col = st.columns([1, 2, 1])
 
 # Left column: Display the CAPTCHA image
 with image_col:
-    st.image(captcha_image_path, caption="CAPTCHA Image", width=320)  # Adjusted width for 20% increase
+    st.image(captcha_image_path, caption="CAPTCHA Image", width=500)  # Adjusted width for 20% increase
 
 
 # Middle column: Display the table of submitted solutions
