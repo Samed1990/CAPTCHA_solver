@@ -78,7 +78,8 @@ image_col, table_col, input_col = st.columns([1, 2, 1])
 
 # Left column: Display the CAPTCHA image
 with image_col:
-    st.image(captcha_image_path, caption="CAPTCHA Image", use_container_width=True)
+    st.image(captcha_image_path, caption="CAPTCHA Image", width=320)  # Adjusted width for 20% increase
+
 
 # Middle column: Display the table of submitted solutions
 with table_col:
@@ -91,9 +92,9 @@ with table_col:
             .styled-table {
                 border-collapse: collapse;
                 margin: auto; /* Center the table horizontally */
-                font-size: 22px; /* Larger font for solutions */
+                font-size: 18px; /* Larger font for solutions */
                 font-family: Arial, sans-serif;
-                width: 100%; /* Full width of middle column */
+                width: 80%; /* Full width of middle column */
                 max-width: 90%;
                 box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
                 border-radius: 8px; /* Rounded corners */
@@ -105,7 +106,7 @@ with table_col:
                 color: white; /* White text for header */
             }
             .styled-table th, .styled-table td {
-                padding: 15px 20px;
+                padding: 12px 15px;
                 border: 1px solid #dddddd;
             }
             .styled-table tbody tr {
