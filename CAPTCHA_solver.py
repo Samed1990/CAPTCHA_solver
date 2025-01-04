@@ -158,9 +158,21 @@ with table_col:
         # Pagination controls
         col1, col2, col3 = st.columns([1, 2, 1])
         with col1:
+            st.markdown(
+                """
+                <div style="margin-left: -100px;">
+                """, 
+                unsafe_allow_html=True
+            )
             if st.session_state["current_page"] > 0:
                 if st.button("Previous"):
                     st.session_state["current_page"] -= 1
+            st.markdown(
+                """
+                </div>
+                """, 
+                unsafe_allow_html=True
+            )
         with col3:
             if st.session_state["current_page"] < total_pages - 1:
                 if st.button("Next"):
