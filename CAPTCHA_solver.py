@@ -23,8 +23,19 @@ def load_solutions():
             if not df.empty:
                 # Ensure "Date & Time" is parsed as datetime
                 df["Date & Time"] = pd.to_datetime(df["Date & Time"])
+                
+                # Delete rows older than 24 hours
+                current_time = datetime.now()
+                time_threshold = current_time - timedelta(hours=24)
+                df = df[df["Date & Time"] > time_threshold]
+                
                 # Sort by "Date & Time" in descending order
                 df = df.sort_values(by="Date & Time", ascending=False, ignore_index=True)
+            
+            with open(TEXT_FILE_PATH, "w") as file:
+                for _, row in df.iterrows():
+                    file.write(f'{row["Solution"]} - {row["Date & Time"]}\n')
+                    
             return df
     else:
         # Create an empty file if it doesn't exist
@@ -196,3 +207,27 @@ with input_col:
     # Submit button
     if st.button("Submit"):
         submit_solution()
+
+# Add copyright footer
+st.markdown(
+    """
+    <style>
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: #f1f1f1;
+        text-align: center;
+        padding: 10px 0;
+        font-size: 14px;
+        color: #555;
+        font-family: Arial, sans-serif;
+    }
+    </style>
+    <div class="footer">
+        © Samad Ismayilov, 2025. All rights reserved.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
