@@ -156,17 +156,27 @@ with table_col:
         )
 
         # Pagination controls
-        col1, col2, col3 = st.columns([1, 1, 1])
-        with col2:
-            prev, _, next = st.columns([1, 1, 1])
-            with prev:
-                if st.session_state["current_page"] > 0:
-                    if st.button("Previous", key="prev_button"):
-                        st.session_state["current_page"] -= 1
-            with next:
-                if st.session_state["current_page"] < total_pages - 1:
-                    if st.button("Next", key="next_button"):
-                        st.session_state["current_page"] += 1
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col1:
+            st.markdown(
+                """
+                <div style="margin-left: -100px;">
+                """, 
+                unsafe_allow_html=True
+            )
+            if st.session_state["current_page"] > 0:
+                if st.button("Previous"):
+                    st.session_state["current_page"] -= 1
+            st.markdown(
+                """
+                </div>
+                """, 
+                unsafe_allow_html=True
+            )
+        with col3:
+            if st.session_state["current_page"] < total_pages - 1:
+                if st.button("Next"):
+                    st.session_state["current_page"] += 1
     else:
         st.write("No solutions submitted yet.")
 
