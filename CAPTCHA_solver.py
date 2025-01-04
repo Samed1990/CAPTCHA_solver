@@ -156,38 +156,20 @@ with table_col:
         )
 
         # Pagination controls
-        st.markdown(
-            """
-            <style>
-            .pagination-buttons {
-                display: flex;
-                justify-content: center;
-                gap: 20px; /* Space between buttons */
-                margin-top: 20px;
-            }
-            </style>
-            """, unsafe_allow_html=True
-        )
-        st.markdown(
-            """
-            <div class="pagination-buttons">
-                <form method="post">
-                    <button type="submit" name="previous" class="btn" style="padding: 10px 20px;">Previous</button>
-                    <button type="submit" name="next" class="btn" style="padding: 10px 20px;">Next</button>
-                </form>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        # Handle button functionality
-        if st.session_state["current_page"] > 0 and st.button("Previous", key="prev_button"):
-            st.session_state["current_page"] -= 1
-
-        if st.session_state["current_page"] < total_pages - 1 and st.button("Next", key="next_button"):
-            st.session_state["current_page"] += 1
+        col1, col2, col3 = st.columns([1, 1, 1])
+        with col2:
+            prev, _, next = st.columns([1, 1, 1])
+            with prev:
+                if st.session_state["current_page"] > 0:
+                    if st.button("Previous", key="prev_button"):
+                        st.session_state["current_page"] -= 1
+            with next:
+                if st.session_state["current_page"] < total_pages - 1:
+                    if st.button("Next", key="next_button"):
+                        st.session_state["current_page"] += 1
     else:
         st.write("No solutions submitted yet.")
+
 
 
 
