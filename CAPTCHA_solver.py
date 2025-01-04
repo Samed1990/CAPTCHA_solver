@@ -18,7 +18,13 @@ def load_solutions():
                 {"Solution": line.split(" - ")[0], "Date & Time": line.split(" - ")[1].strip()}
                 for line in lines if " - " in line
             ]
-            return pd.DataFrame(solutions)
+            df = pd.DataFrame(solutions)
+            if not df.empty:
+                # Ensure "Date & Time" is parsed as datetime
+                df["Date & Time"] = pd.to_datetime(df["Date & Time"])
+                # Sort by "Date & Time" in descending order
+                df = df.sort_values(by="Date & Time", ascending=False, ignore_index=True)
+            return df
     else:
         # Create an empty file if it doesn't exist
         with open(TEXT_FILE_PATH, "w") as file:
@@ -65,9 +71,6 @@ def submit_solution():
         # Clear the input field
         st.session_state["captcha_input"] = ""
         st.success("Solution submitted successfully!")
-
-
-
 
 # Layout: Split the page into three sections (image, table, input)
 image_col, table_col, input_col = st.columns([1, 2, 1])
