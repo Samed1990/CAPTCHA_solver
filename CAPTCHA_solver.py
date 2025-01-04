@@ -84,6 +84,7 @@ with image_col:
 # Middle column: Display the table of submitted solutions
 with table_col:
     if not solutions_df.empty:
+        # Add a styled header for "Submitted Solutions" and move it to the right
         st.markdown(
             """
             <div style="text-align: left; margin-left: 100px;">
@@ -92,6 +93,7 @@ with table_col:
             """,
             unsafe_allow_html=True
         )
+        
         # Apply CSS styling for the table
         st.markdown(
             """
@@ -128,17 +130,44 @@ with table_col:
             </style>
             """, unsafe_allow_html=True
         )
-        # Render the table using HTML for modern styling
+
+        # Add pagination
+        # Initialize session state for pagination
+        if "current_page" not in st.session_state:
+            st.session_state["current_page"] = 0
+
+        # Define pagination logic
+        items_per_page = 10
+        total_pages = (len(solutions_df) - 1) // items_per_page + 1
+        start_index = st.session_state["current_page"] * items_per_page
+        end_index = start_index + items_per_page
+
+        # Display paginated rows
+        paginated_df = solutions_df.iloc[start_index:end_index]
+
+        # Render the paginated table
         st.markdown(
-            solutions_df.to_html(
+            paginated_df.to_html(
                 classes="styled-table",
                 index=False,
                 escape=False
             ),
             unsafe_allow_html=True
         )
+
+        # Pagination controls
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col1:
+            if st.session_state["current_page"] > 0:
+                if st.button("Previous"):
+                    st.session_state["current_page"] -= 1
+        with col3:
+            if st.session_state["current_page"] < total_pages - 1:
+                if st.button("Next"):
+                    st.session_state["current_page"] += 1
     else:
         st.write("No solutions submitted yet.")
+
 
 # Right column: Input field and submit button
 with input_col:
