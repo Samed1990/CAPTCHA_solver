@@ -98,24 +98,28 @@ with table_col:
         # Add a styled header for "Submitted Solutions" and move it to the right
         st.markdown(
             """
-            <div style="text-align: right; margin-right: 500px;">
+            <div style="text-align: right; margin-right: 0;">
                 <h3>Submitted Solutions</h3>
             </div>
             """,
             unsafe_allow_html=True
         )
         
-        # Apply CSS styling for the table
+        # Apply responsive CSS styling for the table
         st.markdown(
             """
             <style>
+            .table-container {
+                display: flex;
+                justify-content: flex-end; /* Move table to the right */
+                margin-right: 5%; /* Adjust right margin for positioning */
+            }
             .styled-table {
                 border-collapse: collapse;
-                margin: auto; /* Center the table horizontally */
                 font-size: 18px; /* Larger font for solutions */
                 font-family: Arial, sans-serif;
-                width: 80%; /* Full width of middle column */
-                max-width: 90%;
+                width: 100%; /* Make table responsive to zoom/resizing */
+                max-width: 600px; /* Restrict maximum width */
                 box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
                 border-radius: 8px; /* Rounded corners */
                 overflow: hidden; /* Prevents corners from being cut off */
@@ -142,7 +146,7 @@ with table_col:
             """, unsafe_allow_html=True
         )
 
-        # Add pagination
+        # Add pagination logic
         # Initialize session state for pagination
         if "current_page" not in st.session_state:
             st.session_state["current_page"] = 0
@@ -156,40 +160,35 @@ with table_col:
         # Display paginated rows
         paginated_df = solutions_df.iloc[start_index:end_index]
 
-        # Render the paginated table
+        # Render the paginated table inside a responsive container
         st.markdown(
-            paginated_df.to_html(
-                classes="styled-table",
-                index=False,
-                escape=False
-            ),
+            f"""
+            <div class="table-container">
+                {paginated_df.to_html(
+                    classes="styled-table",
+                    index=False,
+                    escape=False
+                )}
+            </div>
+            """,
             unsafe_allow_html=True
         )
 
         # Pagination controls
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col1:
-            st.markdown(
-                """
-                <div style="margin-left: -100px;">
-                """, 
-                unsafe_allow_html=True
-            )
+        pagination_col1, pagination_col2, pagination_col3 = st.columns([2, 1, 2])
+        with pagination_col2:
+            st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
             if st.session_state["current_page"] > 0:
-                if st.button("Previous"):
+                if st.button("Previous", key="prev"):
                     st.session_state["current_page"] -= 1
-            st.markdown(
-                """
-                </div>
-                """, 
-                unsafe_allow_html=True
-            )
-        with col3:
+
             if st.session_state["current_page"] < total_pages - 1:
-                if st.button("Next"):
+                if st.button("Next", key="next"):
                     st.session_state["current_page"] += 1
+            st.markdown("</div>", unsafe_allow_html=True)
     else:
         st.write("No solutions submitted yet.")
+
 
 
 
