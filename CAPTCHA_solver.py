@@ -98,7 +98,7 @@ with table_col:
         # Add a styled header for "Submitted Solutions" and move it to the right
         st.markdown(
             """
-            <div style="text-align: right; margin-right: 300px;">
+            <div style="text-align: right; margin-right: 500px;">
                 <h3>Submitted Solutions</h3>
             </div>
             """,
